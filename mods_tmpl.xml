@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<mods xmlns="http://www.loc.gov/mods/v3" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <titleInfo><title>{{ title }}</title></titleInfo>
+  <name type="personal"><namePart>{{ author }}</namePart><role><roleTerm authority="marcrelator" type="text">Author</roleTerm></role></name>
+  <identifier type="unique_id"></identifier>
+  <description></description>
+  <language>
+    <languageTerm authority="iso639-2b" type="code">{{ language }}</languageTerm>
+  </language>
+  <date></date>
+  <publisher></publisher>
+  <internetMediaType></internetMediaType>
+  <name>
+    <namePart/>
+    <role>
+      <roleTerm>entry_author</roleTerm>
+    </role>
+  </name>
+  <url></url>
+  <identifier type="isbn"/>
+  <name>
+    <namePart/>
+    <role>
+      <roleTerm>translator</roleTerm>
+    </role>
+  </name>
+  <detail type="licence">
+    <number/>
+  </detail>
+  <dateModified></dateModified>
+</mods>
