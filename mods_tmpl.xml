@@ -2,30 +2,33 @@
 <mods xmlns="http://www.loc.gov/mods/v3" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
   <titleInfo><title>{{ title }}</title></titleInfo>
   <name type="personal"><namePart>{{ author }}</namePart><role><roleTerm authority="marcrelator" type="text">Author</roleTerm></role></name>
-  <identifier type="unique_id"></identifier>
-  <description></description>
+  {% for collaborator in collaborators %}
+  <name type="personal"><namePart>{{ collaborator }}</namePart><role><roleTerm authority="marcrelator" type="text">Collaborator</roleTerm></role></name>
+  {% endfor %}
+  <identifier type="unique_id">{{ unique_id }}</identifier>
+  <description>{{ description }}</description>
   <language>
     <languageTerm authority="iso639-2b" type="code">{{ language }}</languageTerm>
   </language>
-  <date></date>
-  <publisher></publisher>
-  <internetMediaType></internetMediaType>
+  <date>{{ date }}</date>
+  <publisher>{{ publisher }}</publisher>
+  <internetMediaType>{{ platform }}</internetMediaType>
   <name>
-    <namePart/>
+    <namePart>{{ entry_author }}</namePart>
     <role>
       <roleTerm>entry_author</roleTerm>
     </role>
   </name>
-  <url></url>
-  <identifier type="isbn"/>
+  <url>{{ url }}</url>
+  <identifier type="isbn">{{ isbn }}</identifier>
   <name>
-    <namePart/>
+    <namePart>{{ translator }}</namePart>
     <role>
       <roleTerm>translator</roleTerm>
     </role>
   </name>
   <detail type="licence">
-    <number/>
+    <number>{{ licence }}</number>
   </detail>
-  <dateModified></dateModified>
+  <dateModified>{{ date_modified }}</dateModified>
 </mods>
