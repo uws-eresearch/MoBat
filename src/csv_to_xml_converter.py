@@ -93,7 +93,7 @@ def generate_xml(reader, template_file, output_folder):
             
             #Call php script from here to ingest data
             if image is not None:
-                retCode = subprocess.call(['php', 'ingester.php', title, 
+                retCode = subprocess.call(['php', '../ingester.php', title, 
                                            output_folder + '/' + id + '.xml',  image, image])
                 if retCode != 0:
                     return
