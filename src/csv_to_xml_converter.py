@@ -1,19 +1,15 @@
+# -*- coding: utf-8 -*-
 '''
 Created on 03/10/2013
 
 @author: lloyd
 '''
 import os
-import subprocess
 import sys
 import argparse
 import csv
-import tempfile
-import Image
-import glob
 from os.path import expanduser
 import jinja2
-import zipfile
 from cssutils.serialize import Out
 
 def get_args(args):
@@ -82,29 +78,9 @@ def generate_xml(reader, template_file, output_folder):
                             "licence" :licence,
                             "date_modified" :date_modified
                             }
-            template.stream(templateVars).dump(output_folder + '/' + id + '.xml')
+            template.stream(templateVars).dump(output_folder + '/' + id + '.xml', 'utf-8')
             
-            #TODO thumbnail can be generated if requied
-            image = None
-            files = glob.glob(output_folder + '/' + id + '.*');
-            for file in files:
-                if os.path.splitext(file)[1].lower() in ('.jpg', '.jpeg', '.png', '.gif'):
-                    image = file
-            
-            #Call php script from here to ingest data
-            if image is not None:
-                retCode = subprocess.call(['php', 'ingester.php', title, 
-                                           output_folder + '/' + id + '.xml',  image, image])
-                if retCode != 0:
-                    return
-            else:
-                print ('No image file. Aborting...')
-                return
         i+=1
-        
-    all_files = glob.glob(output_folder + '/*')
-    for f in all_files:
-        os.remove(f)      
         
 
 if (__name__ == "__main__"):
