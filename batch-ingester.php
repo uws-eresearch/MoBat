@@ -49,7 +49,7 @@ foreach($files as $file) {
 	
 		$fedora_object = $repository->constructObject($namespace); // allow fedora to generate a PID
 		
-		$fedora_object['models'] = array('islandora:collectionCModel');
+		$fedora_object->models = array('islandora:collectionCModel');
 		
 		$fedora_object->label = $title;
 		$fedora_object->owner = trim(shell_exec('whoami'));
