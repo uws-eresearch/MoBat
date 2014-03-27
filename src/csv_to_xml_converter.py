@@ -6,6 +6,7 @@ Created on 03/10/2013
 '''
 import os
 import sys
+import datetime
 import argparse
 import csv
 from os.path import expanduser
@@ -60,12 +61,17 @@ def generate_xml(reader, template_file, output_folder):
     i = 0
     for row in reader:
         if i > 0:
-            id,title,author,collaborators,unique_id,description,language,date,publisher,platform,entry_author,url,isbn,translator,licence,date_modified = row
-            names = collaborators.split(',')
+            #id,title,image_dir,author,collaborators,unique_id,description,language,date,publisher,platform,entry_author,url,isbn,translator,licence,date_modified = row
+            #id,author,title,image_dir,date,platform,publisher,collaborators,url,description,language,entry_author,isbn,translator,licence = row
+            id,author,title,image_dir,critical_work,media,date,platform,genre,tags,collaborators,url,description,entry_author,publisher,language,translator,isbn,licence,date_modified = row
+            author_names = author.split(';')
+            collab_names = collaborators.split(',')
+            date_modified = datetime.date.today().strftime("%B %d, %Y")
             templateVars = {"title" : title,
-                            "author" : author,
-                            "collaborators" : names,
-                            "unique_id" : unique_id,
+                            "image_dir" : image_dir,
+                            "authors" : author_names,
+                            "collaborators" : collab_names,
+                            #"unique_id" : unique_id,
                             "description" : description,
                             "language" : language,
                             "date" :date,
@@ -75,8 +81,7 @@ def generate_xml(reader, template_file, output_folder):
                             "url" :url,
                             "isbn" : isbn,
                             "translator" :translator,
-                            "licence" :licence,
-                            "date_modified" :date_modified
+                            "licence" :licence
                             }
             template.stream(templateVars).dump(output_folder + '/' + id + '.xml', 'utf-8')
             
