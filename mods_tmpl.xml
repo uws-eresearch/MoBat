@@ -9,7 +9,8 @@
   <name type="personal"><namePart>{{ collaborator }}</namePart><role><roleTerm authority="marcrelator" type="text">Collaborator</roleTerm></role></name>
   {% endfor %}
   <!-- <identifier type="unique_id">{{ unique_id }}</identifier>-->
-  <abstract>{{ description }}</abstract>
+  <abstract type="description">{{ description }}</abstract>
+  <abstract type="artist_stmt">{{ artist_stmt }}</abstract>
   <language>
     <languageTerm authority="iso639-2b" type="code">{{ language }}</languageTerm>
   </language>

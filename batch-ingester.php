@@ -15,9 +15,10 @@ if (isset($argv)) {
 }
 
 
-$fedoraUrl = "http://115.146.93.105:8080/fedora";
+//$fedoraUrl = "http://115.146.93.105:8080/fedora";
+$fedoraUrl = "http://localhost:8080/fedora";
 $username = "fedoraAdmin";
-$password = "fedoraAdmin";
+$password = "fedAdmin";
 
 $connection = new RepositoryConnection($fedoraUrl, $username, $password);
 $connection->reuseConnection = TRUE;
@@ -32,7 +33,13 @@ $collection_pid = 'islandora:sp_adelta';
 if($arg_action == "delete"){
 	
 	for ($i = $start_id; $i <= $end_id; $i++) {
-		$repository->purgeObject($namespace . ':' . $i);
+		try {
+			//$obj = $repository->getObject($namespace . ':' . $i);
+			$repository->purgeObject($namespace . ':' . $i);
+		}
+		catch(RepositoryException $e){
+			continue; //Skip errorneous object and run until end_id is reached.
+		}
 	}
 	return;
 }
@@ -57,8 +64,11 @@ foreach($files as $file) {
 		//Check whether description is available. If not add "To be completed by project leads"
 		$desc_elements = $dom->getElementsByTagName('abstract');
 		foreach ($desc_elements as $desc){
-			if(empty($desc->nodeValue)){
-				$desc->nodeValue = "To be completed by project leads";
+			if($desc->attributes->getNamedItem("type")->nodeValue == "description"){
+				if(empty($desc->nodeValue)){
+					$desc->nodeValue = "To be completed by project leads";
+					break;
+				}
 			}
 		}
 		
@@ -107,7 +117,9 @@ foreach($files as $file) {
 		foreach ($images as $image){
 			//find the file name
 			$img_path_parts = pathinfo($image);
-			if($img_path_parts['filename'] == "front-page"){
+			if($img_path_parts['filename'] == "front-page" || $img_path_parts['filename'] == "Front-page" ||
+					$img_path_parts['filename'] == "Front-Page"){
+				
 				$tn_path = scaleImages("TN", $image);	
 				if(isset($tn_path)){
 					createImageDatastream("TN", $tn_path, $fedora_object);

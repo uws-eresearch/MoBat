@@ -63,7 +63,7 @@ def generate_xml(reader, template_file, output_folder):
         if i > 0:
             #id,title,image_dir,author,collaborators,unique_id,description,language,date,publisher,platform,entry_author,url,isbn,translator,licence,date_modified = row
             #id,author,title,image_dir,date,platform,publisher,collaborators,url,description,language,entry_author,isbn,translator,licence = row
-            id,author,title,image_dir,critical_work,media,date,platform,genre,tags,collaborators,url,description,entry_author,publisher,language,translator,isbn,licence,date_modified = row
+            id,author,title,image_dir,critical_work,media,date,platform,genre,tags,collaborators,url,description,artist_stmt,entry_author,publisher,language,translator,isbn,licence,date_modified = row
             author_names = author.split(';')
             collab_names = collaborators.split(',')
             date_modified = datetime.date.today().strftime("%B %d, %Y")
@@ -73,6 +73,7 @@ def generate_xml(reader, template_file, output_folder):
                             "collaborators" : collab_names,
                             #"unique_id" : unique_id,
                             "description" : description,
+                            "artist_stmt" : artist_stmt,
                             "language" : language,
                             "date" :date,
                             "publisher" :publisher,
