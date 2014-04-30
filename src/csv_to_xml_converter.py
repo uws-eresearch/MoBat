@@ -63,8 +63,16 @@ def generate_xml(reader, template_file, output_folder):
         if i > 0:
             #id,title,image_dir,author,collaborators,unique_id,description,language,date,publisher,platform,entry_author,url,isbn,translator,licence,date_modified = row
             #id,author,title,image_dir,date,platform,publisher,collaborators,url,description,language,entry_author,isbn,translator,licence = row
-            id,author,title,image_dir,critical_work,media,date,platform,genre,tags,collaborators,url,description,artist_stmt,entry_author,publisher,language,translator,isbn,licence,date_modified = row
+            id,author,title,image_dir,critical_work,media,date,platform,genre,tags,collaborators,url,description,entry_author,description_source, \
+            artist_stmt,artist_stmt_source,publisher,language,translator,isbn,licence,date_modified = row
+            
             author_names = author.split(';')
+            
+            #loop over author_names and format the name to be "first_name last_name"
+            for index in range(len(author_names)):
+                tokens = author_names[index].split(',')
+                author_names[index] = tokens[1] + ' ' + tokens[0]
+            
             collab_names = collaborators.split(',')
             date_modified = datetime.date.today().strftime("%B %d, %Y")
             templateVars = {"title" : title,
