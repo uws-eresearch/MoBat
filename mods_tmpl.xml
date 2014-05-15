@@ -3,34 +3,43 @@
   <titleInfo><title>{{ title }}</title></titleInfo>
   <imageDir id="img_dir">{{ image_dir }}</imageDir>
   {% for author in authors %}
-  <name type="personal"><namePart>{{ author }}</namePart><role><roleTerm authority="marcrelator" type="text">Author</roleTerm></role></name>
+  <name xlink:href=""><namePart>{{ author }}</namePart><role><roleTerm authority="marcrelator" type="text">Author</roleTerm></role></name>
   {% endfor %}
   {% for collaborator in collaborators %}
-  <name type="personal"><namePart>{{ collaborator }}</namePart><role><roleTerm authority="marcrelator" type="text">Collaborator</roleTerm></role></name>
+  {% if not collaborator == '' %}
+  <name xlink:href=""><namePart>{{ collaborator }}</namePart><role><roleTerm authority="marcrelator" type="text">Collaborator</roleTerm></role></name>
+  {% endif %}
   {% endfor %}
   <!-- <identifier type="unique_id">{{ unique_id }}</identifier>-->
-  <abstract type="description">{{ description }}</abstract>
-  <abstract type="artist_stmt">{{ artist_stmt }}</abstract>
+  <abstract type="description" xlink:href="{{ description_src }}">{{ description }}</abstract>
+  <name xlink:href="">
+    <role>
+      <roleTerm>entry_author</roleTerm>
+    </role>
+    <namePart>{{ entry_author }}</namePart>
+  </name>
+  <abstract type="artist_stmt" displayLabel="{{ artist_stmt_src }}" xlink:href="{{ artist_stmt_link }}">{{ artist_stmt }}</abstract>
   <language>
     <languageTerm authority="iso639-2b" type="code">{{ language }}</languageTerm>
   </language>
   <originInfo><dateIssued>{{ date }}</dateIssued></originInfo>
   <originInfo><publisher>{{ publisher }}</publisher></originInfo>
+  <physicalDescription><note>{{ media }}</note></physicalDescription>
   <physicalDescription><internetMediaType>{{ platform }}</internetMediaType></physicalDescription>
-  <name>
-    <namePart>{{ entry_author }}</namePart>
-    <role>
-      <roleTerm>entry_author</roleTerm>
-    </role>
-  </name>
-  <location><url>{{ url }}</url></location>
+  <genre>{{ genre }}</genre>
+  <location>
+  {% for url in urls %}
+  <url>{{ url }}</url>
+  {% endfor %}
+  </location>
   <identifier type="isbn">{{ isbn }}</identifier>
-  <name>
-    <namePart>{{ translator }}</namePart>
+  <name xlink:href="">
     <role>
       <roleTerm>translator</roleTerm>
     </role>
+    <namePart>{{ translator }}</namePart>
   </name>
   <note type="licence">{{ licence }}</note>
+  <classification>{{ tags }}</classification>
   <!-- <originInfo><dateOther type="entry_revision">{{ date_modified }}</dateOther></originInfo>-->
 </mods>

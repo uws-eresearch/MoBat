@@ -27,7 +27,7 @@ def get_args(args):
         parser.error('No action requested')
         return None
     if args.outputfolder is None:
-        args.outputfolder = expanduser("~") + "/.adelta/ingest"
+        args.outputfolder = expanduser("~") + "/.adelta/ingest/Temp"
         #args.outputfolder = os.path.splitext(args.inputfile)[0] + '.xml'
         if not os.path.isdir(args.outputfolder):
             os.makedirs(args.outputfolder)
@@ -64,7 +64,7 @@ def generate_xml(reader, template_file, output_folder):
             #id,title,image_dir,author,collaborators,unique_id,description,language,date,publisher,platform,entry_author,url,isbn,translator,licence,date_modified = row
             #id,author,title,image_dir,date,platform,publisher,collaborators,url,description,language,entry_author,isbn,translator,licence = row
             id,author,title,image_dir,critical_work,media,date,platform,genre,tags,collaborators,url,description,entry_author,description_source, \
-            artist_stmt,artist_stmt_source,publisher,language,translator,isbn,licence,date_modified = row
+            artist_stmt,artist_stmt_source,artist_stmt_link,publisher,language,translator,isbn,licence,date_modified = row
             
             author_names = author.split(';')
             
@@ -74,23 +74,30 @@ def generate_xml(reader, template_file, output_folder):
                 author_names[index] = tokens[1] + ' ' + tokens[0]
             
             collab_names = collaborators.split(',')
+            urls = url.split()
             date_modified = datetime.date.today().strftime("%B %d, %Y")
             templateVars = {"title" : title,
-                            "image_dir" : image_dir,
                             "authors" : author_names,
+                            "image_dir" : image_dir,
+                            "critical_work" : critical_work,
+                            "media" : media,
+                            "date" : date,
+                            "platform" : platform,
+                            "genre" : genre,
+                            "tags" : tags,
                             "collaborators" : collab_names,
-                            #"unique_id" : unique_id,
+                            "urls" : urls,
                             "description" : description,
+                            "entry_author" : entry_author,
+                            "description_src" : description_source,
                             "artist_stmt" : artist_stmt,
+                            "artist_stmt_src" : artist_stmt_source,
+                            "artist_stmt_link" : artist_stmt_link,
+                            "publisher" : publisher,
                             "language" : language,
-                            "date" :date,
-                            "publisher" :publisher,
-                            "platform" :platform,
-                            "entry_author" :entry_author,
-                            "url" :url,
+                            "translator" : translator,
                             "isbn" : isbn,
-                            "translator" :translator,
-                            "licence" :licence
+                            "licence" : licence
                             }
             template.stream(templateVars).dump(output_folder + '/' + id + '.xml', 'utf-8')
             
