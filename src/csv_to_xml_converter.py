@@ -27,7 +27,7 @@ def get_args(args):
         parser.error('No action requested')
         return None
     if args.outputfolder is None:
-        args.outputfolder = expanduser("~") + "/.adelta/ingest/Temp"
+        args.outputfolder = expanduser("~") + "/.adelta/ingest"
         #args.outputfolder = os.path.splitext(args.inputfile)[0] + '.xml'
         if not os.path.isdir(args.outputfolder):
             os.makedirs(args.outputfolder)

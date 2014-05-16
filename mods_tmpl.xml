@@ -27,11 +27,13 @@
   <physicalDescription><note>{{ media }}</note></physicalDescription>
   <physicalDescription><internetMediaType>{{ platform }}</internetMediaType></physicalDescription>
   <genre>{{ genre }}</genre>
+  {% if urls %}
   <location>
   {% for url in urls %}
   <url>{{ url }}</url>
   {% endfor %}
   </location>
+  {% endif %}
   <identifier type="isbn">{{ isbn }}</identifier>
   <name xlink:href="">
     <role>
