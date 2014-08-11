@@ -15,10 +15,10 @@ if (isset($argv)) {
 }
 
 
-//$fedoraUrl = "http://115.146.93.105:8080/fedora";
-$fedoraUrl = "http://localhost:8080/fedora";
+$fedoraUrl = "http://115.146.93.105:8080/fedora";
+// $fedoraUrl = "http://localhost:8080/fedora";
 $username = "fedoraAdmin";
-$password = "fedAdmin";
+$password = "fedoraAdmin";
 
 $connection = new RepositoryConnection($fedoraUrl, $username, $password);
 $connection->reuseConnection = TRUE;
@@ -120,6 +120,9 @@ foreach($files as $file) {
 			if($img_path_parts['filename'] == "front-page" || $img_path_parts['filename'] == "Front-page" ||
 					$img_path_parts['filename'] == "Front-Page"){
 				
+				//First we need to create OBJ datastream from front-page image
+				createImageDatastream("OBJ", $image, $fedora_object);
+				
 				$tn_path = scaleImages("TN", $image);	
 				if(isset($tn_path)){
 					createImageDatastream("TN", $tn_path, $fedora_object);
@@ -188,19 +191,35 @@ foreach($files as $file) {
 //This should return a thumbnail image
 function scaleImages($type, $image_file) {
 	
-	$image = new SimpleImage();
+	//$image = new SimpleImage();
+	
+	/*If we used imagemagick,
+	$image = new Imagick();
+	$image->setOption('jpeg:size', '800x532');
+	$image->readImage('foo.jpg');
+	
+	create thumbnail
+	$image->thumbnailImage($newX,$newY);
+	
+	write to file
+	$image->writeImage($thumbnailFilename);*/
+	
+	
 	$size = getImageSize($image_file);
 	$parts = pathinfo($image_file);
+	$image_file = escapeshellarg($image_file);
 	
 	if($type == "TN"){
 		$path_suffix = "_tn.";
 		$width = 200;
 		$height = 150;
+		$base_cmd = "convert -define jpeg:size=200x200 " . $image_file . " -thumbnail '150x150^' -background indigo -gravity center -extent 150x150 ";
 	}
 	elseif ($type == "Medium"){
 		$path_suffix = "_medium.";
 		$width = 400;
 		$height = 300;
+		$base_cmd = "convert " . $image_file . " -resize 460x345\> ";
 	}
 	
 	$processed_dir = $parts['dirname'].'/processed/';
@@ -213,8 +232,9 @@ function scaleImages($type, $image_file) {
 	if($ok)
 	{
 		$processed_path = $processed_dir.$parts['filename'].$path_suffix.$parts['extension'];
+		$destination = escapeshellarg($processed_path);
 	
-		if ($size[0] > $width) {
+		/*if ($size[0] > $width) {
 			$image->load($image_file);
 			$image->resizeToWidth($width);
 			$image->save($processed_path);
@@ -229,7 +249,12 @@ function scaleImages($type, $image_file) {
 			$image->load($processed_path);
 			$image->resizeToHeight($height);
 			$image->save($processed_path);
-		}
+		}*/
+		
+		//Use imagemagic instead. Just execute a command
+		$cmd = $base_cmd . $destination;
+		exec($cmd);
+		
 		return $processed_path;
 	}
 	else {
@@ -243,10 +268,17 @@ function scaleImages($type, $image_file) {
 //A funtion to create image datastreams
 function createImageDatastream($type, $image_path, $object) {
 	//$datastream_id = $type;
-	$new_datastream = $object->constructDatastream($type);
+	$new_datastream = $object->constructDatastream($type, 'M');
 	//$image_path = $thumbnail[0];
-	$new_datastream->label = $type;
-	$new_datastream->mimetype = 'image/jpeg';
+	$parts = pathinfo($image_path);
+	if($type == 'OBJ') {
+		$new_datastream->label = $parts['basename'];
+	}
+	else {
+		$new_datastream->label = $type;
+	}
+	
+	$new_datastream->mimetype = 'image/' . $parts['extension'];
 	$new_datastream->setContentFromFile($image_path);
 	$object->ingestDatastream($new_datastream);
 }

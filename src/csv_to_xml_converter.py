@@ -71,7 +71,10 @@ def generate_xml(reader, template_file, output_folder):
             #loop over author_names and format the name to be "first_name last_name"
             for index in range(len(author_names)):
                 tokens = author_names[index].split(',')
-                author_names[index] = tokens[1] + ' ' + tokens[0]
+                if len(tokens) > 1:
+                    author_names[index] = tokens[1] + ' ' + tokens[0]
+                else:
+                    author_names[index] = tokens[0]
             
             collab_names = collaborators.split(',')
             urls = url.split()
